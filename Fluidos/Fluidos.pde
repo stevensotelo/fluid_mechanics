@@ -1,9 +1,8 @@
+import controlP5.*;
 // Tamano de pantalla
 int sizeW,sizeH;
-// Boton
-float cmdEmpezarW,cmdEmpezarH,cmdEmpezarX,cmdEmpezarY;
-color cmdEmpezarColor,cmdEmpezarColorLabel;
-String cmdEmpezarLabel; 
+// Controles
+ControlP5 cp5;
 // Recipiente
 float recipienteW,recipienteH,recipienteX,recipienteY;
 color recipienteColor;
@@ -27,8 +26,6 @@ void  setup(){
   fluidoH=200;
   volumenW=100;
   volumenH=250;
-  cmdEmpezarW=150;
-  cmdEmpezarH=20;
   // Inicializar posiciones
   recipienteX=200;
   recipienteY=100;
@@ -36,16 +33,14 @@ void  setup(){
   fluidoY=300;
   volumenX=350;
   volumenY=150;
-  cmdEmpezarX=10;
-  cmdEmpezarY=10;
   // Inicializar colores
   recipienteColor=color(255,255,255);
   fluidoColor=color(69,119,236);
   volumenColor=color(87,68,75);
-  cmdEmpezarColor=color(255,255,255);
-  cmdEmpezarColorLabel=color(0,0,0);
   size(sizeW, sizeH);
-  // Inicializar variables
+  // Controles
+  cp5 = new ControlP5(this);
+  cp5.addButton("empezar").setValue(0).setPosition(20,20).setSize(80,22);
 }
 
 void draw(){
@@ -54,13 +49,6 @@ void draw(){
   rect(recipienteX, recipienteY, recipienteW, recipienteH);
   fill(fluidoColor);  
   rect(fluidoX, fluidoY, fluidoW, fluidoH);
-  // Botones  
-  fill(cmdEmpezarColor);  
-  rect(cmdEmpezarX, cmdEmpezarY, cmdEmpezarW, cmdEmpezarH);
-  // Texto
-  textSize(16);
-  fill(cmdEmpezarColorLabel);
-  text("Empezar", 12, 25); 
   // Animacion
   fill(volumenColor);  
   rect(volumenX, volumenY, volumenW, volumenH);
