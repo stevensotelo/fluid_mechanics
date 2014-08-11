@@ -99,6 +99,13 @@ public void reiniciar(int theValue){
     primeraVezReiniciar=false;
 }
 
+public void resultado(int theValue){
+  if(!primeraVezReiniciar)    
+    volumenY=posicionYInicial;
+  else
+    primeraVezReiniciar=false;
+}
+
 void fluidoFunction(int a){
   if(a==1)
   {
