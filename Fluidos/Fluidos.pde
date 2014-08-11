@@ -13,6 +13,7 @@ color fluidoColor;
 // Volumen
 float volumenW,volumenH,volumenX,volumenY;
 color volumenColor;
+//Limpiador
 // Calculos
 float densidadSolido=150,alturaSolido=150,densidadFluido=1000,x=0;
 // Datos de control
@@ -20,8 +21,6 @@ boolean primeraVezEmpezar,primeraVezReiniciar,mostrarResultado;
 float posicionYInicial;
 // Labels
 Textlabel labelX,labelFluido,labelAltura;
-//Mensajes
-String msgX,msgFluido;
 
 void  setup(){
   // Datos de Control
@@ -29,7 +28,7 @@ void  setup(){
   primeraVezReiniciar=true;  
   mostrarResultado=false;
   // Inicializar tamanos  
-  sizeW=630;
+  sizeW=620;
   sizeH=470;
   recipienteW=400;
   recipienteH=400;  
@@ -49,35 +48,39 @@ void  setup(){
   recipienteColor=color(255,255,255);
   fluidoColor=color(69,119,236);
   volumenColor=color(87,68,75);
-  size(sizeW, sizeH);
+  size(sizeW, sizeH);  
+  //Fuente de Controles
+  ControlFont font = new ControlFont(createFont("Arial",13));
   // Controles
   cp5 = new ControlP5(this);
-  cp5.addButton("empezar").setValue(0).setPosition(20,20).setSize(45,22);
-  cp5.addButton("reiniciar").setValue(0).setPosition(70,20).setSize(45,22);
-  cp5.addButton("resultado").setValue(0).setPosition(120,20).setSize(50,22);
+  cp5.setFont(font);
+  cp5.addButton("empezar").setValue(0).setPosition(10,20).setSize(80,20);
+  cp5.addButton("reiniciar").setValue(0).setPosition(95,20).setSize(94,20);  
   fluido = cp5.addRadioButton("fluidoFunction")
-         .setPosition(20,50)
-         .setSize(40,20)
+         .setPosition(10,45)
+         .setSize(20,20)
          .setColorForeground(color(120))
          .setColorActive(color(255))
          .setColorLabel(color(255))
          .setItemsPerRow(2)
-         .setSpacingColumn(35)
+         .setSpacingColumn(80)
          .addItem("Agua",1)
          .addItem("Aceite",2)
          .addItem("Alcohol",3)
          .addItem("Otro",4);
   fluido.activate(0);
-  cp5.addSlider("densidadSolido").setPosition(20,100).setRange(100,600);
-  labelAltura = cp5.addTextlabel("labelAltura").setPosition(20,120);  
-  labelX = cp5.addTextlabel("labelX").setPosition(20,130);
-  labelFluido = cp5.addTextlabel("labelFluido").setPosition(20,140);
-  msgX="";
-  msgFluido="";
-  
+  cp5.addSlider("densidadSolido").setPosition(10,90).setSize(50,20).setRange(100,600).captionLabel().setText("DENSIDAD SOLIDO");
+  labelAltura = cp5.addTextlabel("labelAltura").setPosition(10,110);  
+  cp5.addButton("resultado").setValue(0).setPosition(10,130).setSize(180,20);
+  labelX = cp5.addTextlabel("labelX").setPosition(10,155);
+  labelFluido = cp5.addTextlabel("labelFluido").setPosition(10,175);
+  labelAltura.setText("ALTURA SOLIDO = " + alturaSolido);
+  labelX.setText("");  
+  labelFluido.setText(""); 
 }
 
 void draw(){  
+  background(0);
   // Constantes
   fill(recipienteColor);
   rect(recipienteX, recipienteY, recipienteW, recipienteH);
@@ -86,21 +89,18 @@ void draw(){
   // Animacion
   fill(volumenColor);  
   rect(volumenX, volumenY, volumenW, volumenH);
-  //Texto de valores
-  labelAltura.setText("H = " + alturaSolido);
-  labelX.setText(msgX);
-  if(mostrarResultado)
-    labelFluido.setText(msgFluido);
-   else
-    labelFluido.setText("");
+  //Texto de valores  
+  labelAltura.draw(this);
+  labelX.draw(this);  
+  labelFluido.draw(this);
 }
 
 public void empezar(int theValue){
   if(!primeraVezEmpezar)
   {
     calcularSolidoSumergido();
-    msgX="X = " + x;
-    msgFluido= "Densidad Fluido = ?";
+    labelX.setText("X = " + x);
+    labelFluido.setText("DENSIDAD FLUIDO = ?");
   }
   else
   {
@@ -113,6 +113,7 @@ public void reiniciar(int theValue){
   if(!primeraVezReiniciar)
   {  
     volumenY=posicionYInicial;
+    fluido.activate(0);
     reiniciarTextos();
   }
   else
@@ -121,7 +122,7 @@ public void reiniciar(int theValue){
 
 public void resultado(int theValue){
   mostrarResultado=!mostrarResultado;
-  msgFluido= "Densidad Fluido = " + densidadFluido;
+  labelFluido.setText("DENSIDAD FLUIDO = "  + densidadFluido);
 }
 
 void fluidoFunction(int a){
@@ -144,7 +145,9 @@ void fluidoFunction(int a){
   {
     fluidoColor=color(76,245,118);
     densidadFluido=random(700,1500);
-  }   
+  }
+  volumenY=posicionYInicial;
+  reiniciarTextos();
 }
 
 void calcularSolidoSumergido(){
@@ -154,6 +157,6 @@ void calcularSolidoSumergido(){
 
 void reiniciarTextos()
 {
-  msgX="";
-  msgFluido="";
+  labelX.setText("");
+  labelFluido.setText("");
 }
