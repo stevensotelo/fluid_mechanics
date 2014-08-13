@@ -17,7 +17,6 @@ Textlabel labelX,labelFluido,labelAltura,labelCreditos;
 // Logo
 PImage logoUao;
 
-
 void  setup(){
   size(624, 440);  
   //Fuente de Controles
@@ -58,7 +57,7 @@ void draw(){
   labelFluido.draw(this);
   labelCreditos.draw(this);
   //Logo 
- logoUao.resize(80, 80); 
+  logoUao.resize(80, 80); 
   image(logoUao, 60, 310);
   // Figuras
   recipiente.display(0,0,false);
@@ -97,7 +96,7 @@ void reset(){
   x=0;
   mover=false;
   flotar=false;
-  densidadSolido=100;  
+  //densidadSolido=100;  
   recipiente = new Figura(400,400,200,20,color(255,255,255));
   liquido = new Fluido(400,200,200,220,color(69,119,236),1000,0.01);
   solido = new Solido(150,150,325,30,color(87,68,75),densidadSolido,1);
@@ -139,16 +138,11 @@ void changedFluido(int a){
     liquido.colorF=color(120,239,255);
     liquido.densidad=790;
   }
-  else
+  else if(a==4)
   {
     liquido.colorF=color(76,245,118);
     liquido.densidad=random(700,1500);
   }
 }
 
-/*
-void calcularSolidoSumergido(){
-  x=(densidadSolido*alturaSolido)/densidadFluido;
-  volumenY=fluidoY-alturaSolido+x;
-}*/
 
