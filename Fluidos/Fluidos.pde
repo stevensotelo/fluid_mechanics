@@ -13,10 +13,13 @@ float densidadSolido,x;
 // Datos de control
 boolean mover,flotar;
 // Labels
-Textlabel labelX,labelFluido,labelAltura;
+Textlabel labelX,labelFluido,labelAltura,labelCreditos;
+// Logo
+PImage logoUao;
+
 
 void  setup(){
-  size(620, 470);  
+  size(624, 440);  
   //Fuente de Controles
   ControlFont font = new ControlFont(createFont("Arial",13));
   // Controles
@@ -41,15 +44,22 @@ void  setup(){
   cp5.addButton("resultado").setValue(0).setPosition(10,170).setSize(180,20);
   labelX = cp5.addTextlabel("labelX").setPosition(10,195);
   labelFluido = cp5.addTextlabel("labelFluido").setPosition(10,215);
+  labelCreditos = cp5.addTextlabel("labelCreditos").setPosition(0.1,420);
+  labelCreditos.setText("DEVELOPED BY: STEVEN SOTELO | STEVENBETANCURT@HOTMAIL.COM | FACULTAD INGENIERÍA");
+  logoUao = loadImage("logouao.jpg");  
   reset();
 }
 
 void draw(){  
-  background(0);
+  background(90);
   //Texto de valores  
   labelAltura.draw(this);
   labelX.draw(this);  
   labelFluido.draw(this);
+  labelCreditos.draw(this);
+  //Logo 
+ logoUao.resize(80, 80); 
+  image(logoUao, 60, 310);
   // Figuras
   recipiente.display(0,0,false);
   liquido.display();
@@ -91,7 +101,7 @@ void reset(){
   recipiente = new Figura(400,400,200,20,color(255,255,255));
   liquido = new Fluido(400,200,200,220,color(69,119,236),1000,0.01);
   solido = new Solido(150,150,325,30,color(87,68,75),densidadSolido,1);
-  labelAltura.setText("ALTURA SOLIDO = " + solido.h + " [M]");
+  labelAltura.setText("ALTURA SOLIDO = " + solido.h + " [M]");  
   labelX.setText("");
   labelFluido.setText("");
   rFluido.activate(0);
@@ -99,8 +109,8 @@ void reset(){
 
 public void empezar(int theValue){
   mover=true;
-  x=solido.sumergido(liquido.densidad);
   solido.densidad=densidadSolido;
+  x=solido.sumergido(liquido.densidad);
 }
 
 public void reiniciar(int theValue){
