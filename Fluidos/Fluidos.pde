@@ -1,62 +1,30 @@
 import controlP5.*;
-// Tamano de pantalla
-int sizeW,sizeH;
 // Controles
 ControlP5 cp5;
-RadioButton fluido;
-// Recipiente
-float recipienteW,recipienteH,recipienteX,recipienteY;
-color recipienteColor;
+RadioButton rFluido;
 // Fluido
-float fluidoW,fluidoH,fluidoX,fluidoY;
-color fluidoColor;
+Fluido liquido;
 // Volumen
-float volumenW,volumenH,volumenX,volumenY;
-color volumenColor;
-//Limpiador
+Solido solido;
+// Recipiente
+Figura recipiente;
 // Calculos
-float densidadSolido=150,alturaSolido=150,densidadFluido=1000,x=0;
+float densidadSolido,x;
 // Datos de control
-boolean primeraVezEmpezar,primeraVezReiniciar,mostrarResultado;
-float posicionYInicial;
+boolean mover,flotar;
 // Labels
 Textlabel labelX,labelFluido,labelAltura;
 
 void  setup(){
-  // Datos de Control
-  primeraVezEmpezar=true;
-  primeraVezReiniciar=true;  
-  mostrarResultado=false;
-  // Inicializar tamanos  
-  sizeW=620;
-  sizeH=470;
-  recipienteW=400;
-  recipienteH=400;  
-  fluidoW=400;
-  fluidoH=200;
-  volumenW=densidadSolido;
-  volumenH=alturaSolido;
-  // Inicializar posiciones
-  recipienteX=200;
-  recipienteY=20;
-  fluidoX=200;
-  fluidoY=220;
-  volumenX=325;
-  posicionYInicial=30;
-  volumenY=posicionYInicial;
-  // Inicializar colores
-  recipienteColor=color(255,255,255);
-  fluidoColor=color(69,119,236);
-  volumenColor=color(87,68,75);
-  size(sizeW, sizeH);  
+  size(620, 470);  
   //Fuente de Controles
   ControlFont font = new ControlFont(createFont("Arial",13));
   // Controles
   cp5 = new ControlP5(this);
   cp5.setFont(font);
   cp5.addButton("empezar").setValue(0).setPosition(10,20).setSize(80,20);
-  cp5.addButton("reiniciar").setValue(0).setPosition(95,20).setSize(94,20);  
-  fluido = cp5.addRadioButton("fluidoFunction")
+  cp5.addButton("reiniciar").setValue(1).setPosition(95,20).setSize(94,20);  
+  rFluido = cp5.addRadioButton("changedFluido")
          .setPosition(10,45)
          .setSize(20,20)
          .setColorForeground(color(120))
@@ -67,96 +35,110 @@ void  setup(){
          .addItem("Agua",1)
          .addItem("Aceite",2)
          .addItem("Alcohol",3)
-         .addItem("Otro",4);
-  fluido.activate(0);
-  cp5.addSlider("densidadSolido").setPosition(10,90).setSize(50,20).setRange(100,600).captionLabel().setText("DENSIDAD SOLIDO");
-  labelAltura = cp5.addTextlabel("labelAltura").setPosition(10,110);  
-  cp5.addButton("resultado").setValue(0).setPosition(10,130).setSize(180,20);
-  labelX = cp5.addTextlabel("labelX").setPosition(10,155);
-  labelFluido = cp5.addTextlabel("labelFluido").setPosition(10,175);
-  labelAltura.setText("ALTURA SOLIDO = " + alturaSolido);
-  labelX.setText("");  
-  labelFluido.setText(""); 
+         .addItem("Otro",4);  
+  cp5.addSlider("densidadSolido").setPosition(10,120).setSize(180,20).setRange(100,600).setNumberOfTickMarks(10).setSliderMode(Slider.FLEXIBLE).captionLabel().align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE).setText("DENSIDAD SÓLIDO [KG/M3]");
+  labelAltura = cp5.addTextlabel("labelAltura").setPosition(10,150);  
+  cp5.addButton("resultado").setValue(0).setPosition(10,170).setSize(180,20);
+  labelX = cp5.addTextlabel("labelX").setPosition(10,195);
+  labelFluido = cp5.addTextlabel("labelFluido").setPosition(10,215);
+  reset();
 }
 
 void draw(){  
   background(0);
-  // Constantes
-  fill(recipienteColor);
-  rect(recipienteX, recipienteY, recipienteW, recipienteH);
-  fill(fluidoColor);  
-  rect(fluidoX, fluidoY, fluidoW, fluidoH);
-  // Animacion
-  fill(volumenColor);  
-  rect(volumenX, volumenY, volumenW, volumenH);
   //Texto de valores  
   labelAltura.draw(this);
   labelX.draw(this);  
   labelFluido.draw(this);
+  // Figuras
+  recipiente.display(0,0,false);
+  liquido.display();
+  if(mover)
+  {
+    // Sumergido en el fluido
+    if(liquido.contains(solido))
+    {
+      if(liquido.empujar(solido))
+      {
+        solido.inverseMove();
+        flotar=true;        
+      }
+      else
+        solido.applyForce(liquido.drag(solido));
+    }
+    //Gravedad
+    else if(!flotar)
+      solido.applyForce( new PVector(0, 0.1*solido.mass));      
+    //Se mueve el solido
+    solido.update();
+    
+    if(flotar)
+    {      
+      if(solido.location.y <= (liquido.location.y-solido.location.y+x))
+        mover=false;
+    }
+  }
+  solido.display();  
+  if(!mover && flotar)
+    labelX.setText("X = " + x + " [M]");
+}
+
+void reset(){
+  x=0;
+  mover=false;
+  flotar=false;
+  densidadSolido=100;  
+  recipiente = new Figura(400,400,200,20,color(255,255,255));
+  liquido = new Fluido(400,200,200,220,color(69,119,236),1000,0.01);
+  solido = new Solido(150,150,325,30,color(87,68,75),densidadSolido,1);
+  labelAltura.setText("ALTURA SOLIDO = " + solido.h + " [M]");
+  labelX.setText("");
+  labelFluido.setText("");
+  rFluido.activate(0);
 }
 
 public void empezar(int theValue){
-  if(!primeraVezEmpezar)
-  {
-    calcularSolidoSumergido();
-    labelX.setText("X = " + x);
-    labelFluido.setText("DENSIDAD FLUIDO = ?");
-  }
-  else
-  {
-    primeraVezEmpezar=false;
-    reiniciarTextos();
-  }
+  mover=true;
+  x=solido.sumergido(liquido.densidad);
+  solido.densidad=densidadSolido;
 }
 
 public void reiniciar(int theValue){
-  if(!primeraVezReiniciar)
-  {  
-    volumenY=posicionYInicial;
-    fluido.activate(0);
-    reiniciarTextos();
-  }
-  else
-    primeraVezReiniciar=false;
+  reset();
 }
 
 public void resultado(int theValue){
-  mostrarResultado=!mostrarResultado;
-  labelFluido.setText("DENSIDAD FLUIDO = "  + densidadFluido);
+  labelFluido.setText("DEN. FLUIDO = " + liquido.densidad + "[KG/M3]");
 }
 
-void fluidoFunction(int a){
+void changedFluido(int a){
+  if(mover)
+    reset();
   if(a==1)
   {
-    fluidoColor=color(69,119,236);
-    densidadFluido=1000;
+    liquido.colorF=color(69,119,236);
+    liquido.densidad=1000;
   }
   else if(a==2)
   {
-    fluidoColor=color(245,245,76);
-    densidadFluido=920;
+    liquido.colorF=color(245,245,76);
+    liquido.densidad=920;
   }
   else if(a==3)
   {
-    fluidoColor=color(120,239,255);
-    densidadFluido=790;
+    liquido.colorF=color(120,239,255);
+    liquido.densidad=790;
   }
   else
   {
-    fluidoColor=color(76,245,118);
-    densidadFluido=random(700,1500);
+    liquido.colorF=color(76,245,118);
+    liquido.densidad=random(700,1500);
   }
-  volumenY=posicionYInicial;
-  reiniciarTextos();
 }
 
+/*
 void calcularSolidoSumergido(){
   x=(densidadSolido*alturaSolido)/densidadFluido;
   volumenY=fluidoY-alturaSolido+x;
-}
+}*/
 
-void reiniciarTextos()
-{
-  labelX.setText("");
-  labelFluido.setText("");
-}
