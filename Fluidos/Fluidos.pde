@@ -26,7 +26,7 @@ void  setup(){
   cp5 = new ControlP5(this);
   cp5.setFont(font);      
   rFluido = cp5.addRadioButton("changedFluido")
-         .setPosition(10,20)
+         .setPosition(5,20)
          .setSize(20,20)
          .setColorForeground(color(120))
          .setColorActive(color(255))
@@ -37,15 +37,15 @@ void  setup(){
          .addItem("Aceite",2)
          .addItem("Alcohol",3)
          .addItem("Otro",4);    
-  cp5.addSlider("densidadSolido").setPosition(10,85).setSize(180,20).setRange(100,600).setNumberOfTickMarks(10).setSliderMode(Slider.FLEXIBLE).captionLabel().align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE).setText("DENSIDAD SÓLIDO [KG/M3]");
-  labelAltura = cp5.addTextlabel("labelAltura").setPosition(10,120);
-  cp5.addButton("empezar").setPosition(10,140).setSize(180,20);  
-  cp5.addButton("resultado").setPosition(10,170).setSize(180,20);
-  labelX = cp5.addTextlabel("labelX").setPosition(10,195);
-  labelFluido = cp5.addTextlabel("labelFluido").setPosition(10,215);
-  labelCredito1 = cp5.addTextlabel("labelCredito1").setFont(fontC).setPosition(0.1,360);
-  labelCredito2 = cp5.addTextlabel("labelCredito2").setFont(fontC).setPosition(0.1,380);
-  labelCredito3 = cp5.addTextlabel("labelCredito3").setFont(fontC).setPosition(0.1,400);
+  cp5.addSlider("densidadSolido").setPosition(5,85).setSize(180,20).setRange(100,600).setNumberOfTickMarks(10).setSliderMode(Slider.FLEXIBLE).captionLabel().align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE).setText("DENSIDAD SÓLIDO [KG/M3]");
+  labelAltura = cp5.addTextlabel("labelAltura").setPosition(5,120);
+  cp5.addButton("empezar").setPosition(5,140).setSize(180,20);  
+  cp5.addButton("resultado").setPosition(5,170).setSize(180,20);
+  labelX = cp5.addTextlabel("labelX").setPosition(5,195);
+  labelFluido = cp5.addTextlabel("labelFluido").setPosition(5,215);
+  labelCredito1 = cp5.addTextlabel("labelCredito1").setFont(fontC).setPosition(1,360);
+  labelCredito2 = cp5.addTextlabel("labelCredito2").setFont(fontC).setPosition(1,380);
+  labelCredito3 = cp5.addTextlabel("labelCredito3").setFont(fontC).setPosition(1,400);
   labelCredito1.setText("DEVELOPED BY: STEVEN SOTELO");
   labelCredito2.setText("STEVENBETANCURT@HOTMAIL.COM");
   labelCredito3.setText("FACULTAD DE INGENIERÍA");
