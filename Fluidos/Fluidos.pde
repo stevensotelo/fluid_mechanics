@@ -49,7 +49,7 @@ void  setup(){
   labelCredito1.setText("DEVELOPED BY: STEVEN SOTELO");
   labelCredito2.setText("STEVENBETANCURT@HOTMAIL.COM");
   labelCredito3.setText("FACULTAD DE INGENIERÍA");
-  logoUao = loadImage("logouao.jpg");  
+  logoUao = loadImage("logouao.png");  
   reset();
   rFluido.activate(0);
 }
@@ -96,7 +96,7 @@ void draw(){
   }
   solido.display();  
   if(!mover && flotar)
-    labelX.setText("X = " + x + " [M]");
+    labelX.setText("X = " + x + " [CM]");
 }
 
 void reset(){
@@ -108,7 +108,7 @@ void reset(){
   else
     liquido = new Fluido(400,200,200,220,liquido.colorF,liquido.densidad,0.01);
   solido = new Solido(150,150,325,30,(solido==null ? color(87,68,75) : solido.colorF),densidadSolido,1);
-  labelAltura.setText("ALTURA SOLIDO = " + solido.h + " [M]");  
+  labelAltura.setText("ALTURA SOLIDO = " + solido.h + " [CM]");  
   labelX.setText("");
   labelFluido.setText("");
   x=solido.sumergido(liquido.densidad);  
@@ -120,7 +120,7 @@ public void empezar(int theValue){
 }
 
 public void resultado(int theValue){
-  labelFluido.setText("DEN. FLUIDO = " + liquido.densidad + "[KG/M3]");
+  labelFluido.setText("DENSIDAD = " + liquido.densidad + "[KG/M3]");
 }
 
 void changedFluido(int a){
